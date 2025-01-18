@@ -1,0 +1,6 @@
+services:
+  varastokkr.identityapi:
+    image: ${DOCKER_REGISTRY-}varastokkridentityapi
+    build:
+      context: .
+      dockerfile: Varastokkr.IdentityAPI/Dockerfile

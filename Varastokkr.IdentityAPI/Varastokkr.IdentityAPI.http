@@ -1,0 +1,6 @@
+@Varastokkr.IdentityAPI_HostAddress = http://localhost:5003
+
+GET {{Varastokkr.IdentityAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
