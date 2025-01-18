@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Varastokkr.IdentityAPI", "V
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{CEEEC1C3-E799-4AA9-A189-927EEED2C4A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Varastokkr.Shared", "Varastokkr.Shared\Varastokkr.Shared.csproj", "{ABFF01AC-5DA2-43D1-AE58-4E1B92AC3AD1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CEEEC1C3-E799-4AA9-A189-927EEED2C4A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEEEC1C3-E799-4AA9-A189-927EEED2C4A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEEEC1C3-E799-4AA9-A189-927EEED2C4A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABFF01AC-5DA2-43D1-AE58-4E1B92AC3AD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABFF01AC-5DA2-43D1-AE58-4E1B92AC3AD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABFF01AC-5DA2-43D1-AE58-4E1B92AC3AD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABFF01AC-5DA2-43D1-AE58-4E1B92AC3AD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
