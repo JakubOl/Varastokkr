@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Varastokkr.Shared.Extensions;
 
 namespace Varastokkr.Shared;
 
-internal static class MigrateDbContextExtensions
+public static class MigrateDbContextExtensions
 {
     private static readonly string ActivitySourceName = "DbMigrations";
     private static readonly ActivitySource ActivitySource = new(ActivitySourceName);

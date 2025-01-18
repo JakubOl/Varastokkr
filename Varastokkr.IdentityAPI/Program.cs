@@ -1,27 +1,62 @@
+using Asp.Versioning;
+using FluentValidation;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Varastokkr.IdentityAPI.Infrastructure;
+using Varastokkr.Shared;
+using Varastokkr.Shared.Extensions;
 
-namespace Varastokkr.IdentityAPI;
+var assembly = typeof(Program).Assembly;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program
-{
-    public static void Main(string[] args)
-    {
-        var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddAuthorization();
 
-        builder.Services.AddAuthorization();
+var dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(dbConnectionString));
+builder.Services.AddMigration<IdentityDbContext, UsersSeed>();
 
-        builder.Services.AddOpenApi();
+builder.Services
+    .AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<IdentityDbContext>()
+    .AddDefaultTokenProviders();
 
-        var app = builder.Build();
+builder.Services.AddSingleton<TokenGenerator, TokenGenerator>();
 
-        if (app.Environment.IsDevelopment())
-        {
-            app.MapOpenApi();
-        }
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
-        app.UseHttpsRedirection();
+builder.AddDefaultAuthentication();
 
-        app.UseAuthorization();
+var withApiVersioning = builder.Services.AddApiVersioning();
+builder.AddDefaultOpenApi(withApiVersioning);
 
-        app.Run();
-    }
-}
+builder.ConfigureOpenTelemetry();
+builder.AddDefaultHealthChecks();
+
+builder.Services.AddEndpoints(assembly);
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddValidatorsFromAssembly(assembly);
+
+var app = builder.Build();
+
+app.MapDefaultEndpoints();
+
+var apiVersionSet = app
+    .NewApiVersionSet()
+    .HasApiVersion(new ApiVersion(1))
+    .ReportApiVersions()
+    .Build();
+
+RouteGroupBuilder versionedGroup = app
+    .MapGroup("api/v{version:apiVersion}")
+    .WithApiVersionSet(apiVersionSet);
+
+app.MapEndpoints(versionedGroup);
+app.UseHttpsRedirection();
+
+app.UseDefaultOpenApi();
+app.UseAuthorization();
+app.UseAuthentication();
+
+app.Run();

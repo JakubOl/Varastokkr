@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Varastokkr.Shared;
+namespace Varastokkr.Shared.Extensions;
 
 public static class ActivityExtensions
 {
