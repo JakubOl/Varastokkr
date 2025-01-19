@@ -40,23 +40,11 @@ public class UsersSeed(ILogger<UsersSeed> logger, UserManager<IdentityUser> user
         {
             bob = new IdentityUser
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = "bob",
                 Email = "BobSmith@email.com",
                 EmailConfirmed = true,
-                //CardHolderName = "Bob Smith",
-                //CardNumber = "XXXXXXXXXXXX1881",
-                //CardType = 1,
-                //City = "Redmond",
-                //Country = "U.S.",
-                //Expiration = "12/24",
-                Id = Guid.NewGuid().ToString(),
-                //LastName = "Smith",
-                //Name = "Bob",
                 PhoneNumber = "1234567890",
-                //ZipCode = "98052",
-                //State = "WA",
-                //Street = "15703 NE 61st Ct",
-                //SecurityNumber = "456"
             };
 
             var result = await userManager.CreateAsync(bob, "Pass123$");
