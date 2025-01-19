@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthorization();
 
-var dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var dbConnectionString = builder.Configuration.GetConnectionString("IdentityDbConnectionString");
 builder.Services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(dbConnectionString));
 builder.Services.AddMigration<IdentityDbContext, UsersSeed>();
 

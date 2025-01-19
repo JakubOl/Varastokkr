@@ -399,3 +399,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 /Varastokkr.IdentityAPI/appsettings.Development.json
+*.env

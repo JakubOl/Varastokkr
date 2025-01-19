@@ -1,13 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Varastokkr.IdentityAPI", "Varastokkr.IdentityAPI\Varastokkr.IdentityAPI.csproj", "{84879448-6571-4FE2-B580-C6A22F04870B}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{CEEEC1C3-E799-4AA9-A189-927EEED2C4A3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Varastokkr.Shared", "Varastokkr.Shared\Varastokkr.Shared.csproj", "{ABFF01AC-5DA2-43D1-AE58-4E1B92AC3AD1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{25346717-483C-4F56-86F0-478BEB62F7A9}"
+	ProjectSection(SolutionItems) = preProject
+		.env = .env
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

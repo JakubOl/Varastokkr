@@ -67,7 +67,7 @@ public static class MigrateDbContextExtensions
 
         try
         {
-            //await context.Database.MigrateAsync();
+            await context.Database.MigrateAsync();
             await seeder(context, services);
         }
         catch (Exception ex)
