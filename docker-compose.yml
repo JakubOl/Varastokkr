@@ -25,7 +25,7 @@ services:
           context: .
           dockerfile: Varastokkr.IdentityAPI/Dockerfile
         ports: 
-          - "5000:80"
+          - "5001:80"
         depends_on:
           - sqlserver
         networks:
@@ -33,6 +33,7 @@ services:
         environment:
           ASPNETCORE_ENVIRONMENT: "${ASPNETCORE_ENVIRONMENT}"
           ConnectionStrings__IdentityDbConnectionString: "Server=sqlserver,1433;Database=IdentityDb;User=sa;Password=${SA_PASSWORD};Encrypt=False;"
+          ASPNETCORE_URLS: "http://+:80"
         healthcheck:
           test: ["CMD-SHELL", "curl --fail http://localhost:80/health || exit 1"]
           interval: 30s
