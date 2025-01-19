@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Ygglink.IdentityApi.Infrastructure;
+namespace Varastokkr.IdentityAPI.Infrastructure;
 
-public class IdentityDbContext(DbContextOptions<IdentityDbContext> options) : IdentityDbContext<IdentityUser>(options)
+public class IdentityApiDbContext(DbContextOptions<IdentityApiDbContext> options) : IdentityDbContext<IdentityUser>(options)
 {
     protected override void OnModelCreating(ModelBuilder builder) => base.OnModelCreating(builder);
 }

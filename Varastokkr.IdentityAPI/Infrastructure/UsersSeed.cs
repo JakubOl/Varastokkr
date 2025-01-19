@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Varastokkr.Shared;
 
 namespace Varastokkr.IdentityAPI.Infrastructure;
 
-public class UsersSeed(ILogger<UsersSeed> logger, UserManager<IdentityUser> userManager) : IDbSeeder<IdentityDbContext>
+public class UsersSeed(ILogger<UsersSeed> logger, UserManager<IdentityUser> userManager) : IDbSeeder<IdentityApiDbContext>
 {
-    public async Task SeedAsync(IdentityDbContext context)
+    public async Task SeedAsync(IdentityApiDbContext context)
     {
         var alice = await userManager.FindByNameAsync("alice");
 

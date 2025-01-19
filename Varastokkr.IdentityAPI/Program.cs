@@ -1,7 +1,6 @@
 using Asp.Versioning;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Varastokkr.IdentityAPI.Infrastructure;
 using Varastokkr.Shared;
@@ -13,12 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthorization();
 
 var dbConnectionString = builder.Configuration.GetConnectionString("IdentityDbConnectionString");
-builder.Services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(dbConnectionString));
-builder.Services.AddMigration<IdentityDbContext, UsersSeed>();
+builder.Services.AddDbContext<IdentityApiDbContext>(options => options.UseSqlServer(dbConnectionString));
+builder.Services.AddMigration<IdentityApiDbContext, UsersSeed>();
 
 builder.Services
     .AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<IdentityDbContext>()
+    .AddEntityFrameworkStores<IdentityApiDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<TokenGenerator, TokenGenerator>();
