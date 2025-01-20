@@ -4,30 +4,34 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Log in to ACR
-        uses: docker/login-action@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
         with:
-          registry: ${{ secrets.AZURE_CONTAINER_REGISTRY }}
-          username: ${{ secrets.AZURE_ACR_USERNAME }}
-          password: ${{ secrets.AZURE_ACR_PASSWORD }}
+          dotnet-version: '9.0.x'
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
+      - name: Restore dependencies
+        run: dotnet restore ./Varastokkr.IdentityAPI/Varastokkr.IdentityAPI.csproj
+
+      - name: Build
+        run: dotnet build ./Varastokkr.IdentityAPI/Varastokkr.IdentityAPI.csproj --configuration Release --no-restore
+
+      - name: Publish
+        run: dotnet publish ./Varastokkr.IdentityAPI/Varastokkr.IdentityAPI.csproj --configuration Release --no-build --output ./publish
+
+      - name: Azure Login
+        uses: azure/login@v1
         with:
-          context: .
-          file: ./Varastokkr.IdentityAPI/Dockerfile
-          push: true
-          tags: ${{ secrets.AZURE_CONTAINER_REGISTRY }}/varastokkr.identityapi:${{ github.sha }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Azure Web App Refresh
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
-          images: ${{ secrets.AZURE_CONTAINER_REGISTRY }}/varastokkr.identityapi:${{ github.sha }}
+          app-name: ${{ secrets.AZURE_APP_SERVICE_NAME }}
+          package: ./publish
