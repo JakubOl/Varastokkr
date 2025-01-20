@@ -22,6 +22,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
+          file: ./Varastokkr.IdentityAPI/Dockerfile
           push: true
           tags: ${{ secrets.AZURE_CONTAINER_REGISTRY }}/varastokkr.identityapi:${{ github.sha }}
 
