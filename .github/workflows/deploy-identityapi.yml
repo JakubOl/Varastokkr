@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
 
 env:
-    AZURE_CONTAINER_REGISTRY: acr_name
-    CONTAINER_APP_NAME: acr_name
-    RESOURCE_GROUP: acr_name
+    AZURE_CONTAINER_REGISTRY: varastokkracr
+    CONTAINER_APP_NAME: varastokkr-identityapi
+    RESOURCE_GROUP: varastokkr
 
 jobs:
   build-and-deploy:
