@@ -13,12 +13,12 @@ builder.Services.AddAuthorization();
 
 var dbConnectionString = builder.Configuration.GetConnectionString("IdentityDbConnectionString");
 builder.Services.AddDbContext<IdentityApiDbContext>(options => options.UseSqlServer(dbConnectionString));
-builder.Services.AddMigration<IdentityApiDbContext, UsersSeed>();
+//builder.Services.AddMigration<IdentityApiDbContext, UsersSeed>();
 
 builder.Services
     .AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<IdentityApiDbContext>()
-    .AddDefaultTokenProviders();
+    .AddDefaultTokenProviders();r
 
 builder.Services.AddSingleton<TokenGenerator, TokenGenerator>();
 
