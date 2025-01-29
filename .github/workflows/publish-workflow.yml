@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
 
 env:
-    AZURE_CONTAINER_REGISTRY: varastokkracr
-    VARASTOKKR_IDENTITYAPI_CONTAINER_APP_NAME: varastokkr-identityapi
-    RESOURCE_GROUP: varastokkr
+  AZURE_CONTAINER_REGISTRY: varastokkracr
+  VARASTOKKR_IDENTITYAPI_CONTAINER_APP_NAME: varastokkr-identityapi
+  RESOURCE_GROUP: varastokkr
 
 jobs:
   build-and-deploy-identity-api:
@@ -37,14 +37,14 @@ jobs:
       - name: Build and push container image to ACR
         uses: docker/build-push-action@v6
         with:
-            push: true
-            tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_IDENTITYAPI_CONTAINER_APP_NAME }}:${{ github.sha }}
-            file: ./Varastokkr.IdentityAPI/Dockerfile
+          push: true
+          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_IDENTITYAPI_CONTAINER_APP_NAME }}:${{ github.sha }}
+          file: ./Varastokkr.IdentityAPI/Dockerfile
 
       - name: Azure Login
         uses: azure/login@v2
         with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy to Azure Web Container Apps
         uses: azure/container-apps-deploy-action@v1
