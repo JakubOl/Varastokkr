@@ -22,7 +22,7 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Build
-        run: dotnet build ./Varastokkr.IdentityAPI --configuration Release --no-restore
+        run: dotnet build ./Varastokkr.IdentityAPI --configuration Release
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
