@@ -5,11 +5,11 @@ on:
 
 env:
     AZURE_CONTAINER_REGISTRY: varastokkracr
-    CONTAINER_APP_NAME: varastokkr-identityapi
+    VARASTOKKR_IDENTITYAPI_CONTAINER_APP_NAME: varastokkr-identityapi
     RESOURCE_GROUP: varastokkr
 
 jobs:
-  build-and-deploy:
+  build-and-deploy-identity-api:
     runs-on: ubuntu-latest
 
     steps:
@@ -38,7 +38,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
             push: true
-            tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
+            tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_IDENTITYAPI_CONTAINER_APP_NAME }}:${{ github.sha }}
             file: ./Varastokkr.IdentityAPI/Dockerfile
 
       - name: Azure Login
@@ -51,6 +51,6 @@ jobs:
         with:
           imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.AZURE_CONTAINER_REGISTRY }}:${{ github.sha }}
           resourceGroup: ${{ env.RESOURCE_GROUP }}
-          containerAppName: ${{ env.CONTAINER_APP_NAME }}
+          containerAppName: ${{ env.VARASTOKKR_IDENTITYAPI_CONTAINER_APP_NAME }}
           environmentVariables:
             ASPNETCORE_ENVIRONMENT=Development
