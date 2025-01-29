@@ -18,7 +18,7 @@ builder.Services.AddDbContext<IdentityApiDbContext>(options => options.UseSqlSer
 builder.Services
     .AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<IdentityApiDbContext>()
-    .AddDefaultTokenProviders();r
+    .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<TokenGenerator, TokenGenerator>();
 
