@@ -3,6 +3,11 @@ name: CI/CD Pipeline
 on:
   workflow_dispatch:
 
+env:
+    AZURE_CONTAINER_REGISTRY: acr_name
+    CONTAINER_APP_NAME: acr_name
+    RESOURCE_GROUP: acr_name
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -16,22 +21,36 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - name: Restore dependencies
-        run: dotnet restore ./Varastokkr.IdentityAPI/Varastokkr.IdentityAPI.csproj
-
       - name: Build
-        run: dotnet build ./Varastokkr.IdentityAPI/Varastokkr.IdentityAPI.csproj --configuration Release --no-restore
+        run: dotnet build ./Varastokkr.IdentityAPI --configuration Release --no-restore
 
-      - name: Publish
-        run: dotnet publish ./Varastokkr.IdentityAPI/Varastokkr.IdentityAPI.csproj --configuration Release --no-build --output ./publish
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Azure Login
-        uses: azure/login@v1
+        uses: docker/login-action@v3
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          registry: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
+          username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+          password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
 
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v2
+      - name: Build and push container image to ACR
+        uses: docker/build-push-action@v6
         with:
-          app-name: ${{ secrets.AZURE_APP_SERVICE_NAME }}
-          package: ./publish
+            push: true
+            tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
+            file: ./Varastokkr.IdentityAPI/Dockerfile
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure Web Container Apps
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.AZURE_CONTAINER_REGISTRY }}:${{ github.sha }}
+          resourceGroup: ${{ env.RESOURCE_GROUP }}
+          containerAppName: ${{ env.CONTAINER_APP_NAME }}
+          environmentVariables:
+            ASPNETCORE_ENVIRONMENT=Development
