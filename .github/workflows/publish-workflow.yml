@@ -7,6 +7,7 @@ env:
   AZURE_CONTAINER_REGISTRY: varastokkracr
   VARASTOKKR_IDENTITYAPI_CONTAINER_APP_NAME: varastokkr-identityapi
   RESOURCE_GROUP: varastokkr
+  VARASTOKKR_IDENTITYAPI_IMAGE_NAME: varastokkr-identityapi
 
 jobs:
   build-and-deploy-identity-api:
@@ -46,10 +47,16 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Install/Update Container Apps Extension
+        run: az extension add --name containerapp --upgrade
+
+      - name: Register Microsoft.App
+        run: az provider register --namespace Microsoft.App --wait
+
       - name: Deploy to Azure Web Container Apps
         uses: azure/container-apps-deploy-action@v1
         with:
-          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.AZURE_CONTAINER_REGISTRY }}:${{ github.sha }}
+          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_IDENTITYAPI_IMAGE_NAME }}:${{ github.sha }}
           resourceGroup: ${{ env.RESOURCE_GROUP }}
           containerAppName: ${{ env.VARASTOKKR_IDENTITYAPI_CONTAINER_APP_NAME }}
           environmentVariables:
