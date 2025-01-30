@@ -56,8 +56,12 @@ jobs:
       - name: Deploy to Azure Web Container Apps
         uses: azure/container-apps-deploy-action@v1
         with:
-          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_IDENTITYAPI_IMAGE_NAME }}:${{ github.sha }}
           resourceGroup: ${{ env.RESOURCE_GROUP }}
           containerAppName: ${{ env.VARASTOKKR_IDENTITYAPI_CONTAINER_APP_NAME }}
+          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_IDENTITYAPI_IMAGE_NAME }}:${{ github.sha }}
+          registryCredentials:
+            server=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
+            username=${{ secrets.AZURE_REGISTRY_USERNAME }}
+            password=${{ secrets.AZURE_REGISTRY_PASSWORD }}
           environmentVariables:
             ASPNETCORE_ENVIRONMENT=Development
