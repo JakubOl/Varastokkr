@@ -39,7 +39,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_IDENTITYAPI_CONTAINER_APP_NAME }}:${{ github.sha }}
+          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_IDENTITYAPI_IMAGE_NAME }}:${{ github.sha }}
           file: ./Varastokkr.IdentityAPI/Dockerfile
 
       - name: Azure Login
