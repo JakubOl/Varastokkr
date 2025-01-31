@@ -1,26 +1,17 @@
 using Asp.Versioning;
 using FluentValidation;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Varastokkr.IdentityAPI.Infrastructure;
-using Varastokkr.Shared;
 using Varastokkr.Shared.Extensions;
+using Varastokkr.Shared;
+using Varastokkr.ProductsAPI.Infrastructure;
 
 var assembly = typeof(Program).Assembly;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthorization();
 
-var dbConnectionString = builder.Configuration.GetConnectionString("IdentityDbConnectionString");
-builder.Services.AddDbContext<IdentityApiDbContext>(options => options.UseSqlServer(dbConnectionString));
-builder.Services.AddMigration<IdentityApiDbContext, UsersSeed>();
-
-builder.Services
-    .AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<IdentityApiDbContext>()
-    .AddDefaultTokenProviders();
-
-builder.Services.AddSingleton<TokenGenerator, TokenGenerator>();
+var dbConnectionString = builder.Configuration.GetConnectionString("ProductDbConnectionString");
+builder.Services.AddDbContext<ProductDbContext>(options => options.UseSqlServer(dbConnectionString));
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
@@ -38,6 +29,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddValidatorsFromAssembly(assembly);
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ProductDbContext>();
+    dbContext.Database.Migrate();
+}
 
 app.MapDefaultEndpoints();
 
