@@ -10,7 +10,7 @@ env:
   VARASTOKKR_IDENTITYAPI_IMAGE_NAME: varastokkr-identityapi
 
 jobs:
-  build-and-deploy-identity-api:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
           password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
 
-      - name: Build and push container image to ACR
+      - name: Build and push Identity.API to ACR
         uses: docker/build-push-action@v6
         with:
           push: true
@@ -53,7 +53,7 @@ jobs:
       - name: Register Microsoft.App
         run: az provider register --namespace Microsoft.App --wait
 
-      - name: Deploy to Azure Web Container Apps
+      - name: Deploy Identity.API to Azure Web Container Apps
         uses: azure/container-apps-deploy-action@v1
         with:
           resourceGroup: ${{ env.RESOURCE_GROUP }}
