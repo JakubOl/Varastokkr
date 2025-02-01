@@ -6,7 +6,7 @@ internal class UpdateProductEndpoint : IEndpoint
     {
         app.MapPost("products/{id:Guid}",
                 async (Guid id, 
-                CreateUpdateProductRequestDto dto,
+                CreateUpdateProductDto dto,
                 ILogger<GetProductsEndpoint> logger,
                 ProductDbContext db) =>
                 {

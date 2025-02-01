@@ -5,20 +5,20 @@ internal class GetProductsEndpoint : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("products",
-                async (GetProductsRequest dto,
+                async (GetProductsDto dto,
                 ILogger<GetProductsEndpoint> logger,
                 ProductDbContext db) =>
                 {
-                    var productsCount = await db.Products.LongCountAsync();
+                    var productsCount = await db.Products.CountAsync();
 
                     var products = await db.Products
                         .Skip(dto.Skip)
                         .Take(dto.Take)
                         .ToListAsync();
 
-                    var productsDtos = products.Select(x => x.MapToDto());
+                    var response = new ProductsDto(products.Select(x => x.MapToDto()), productsCount);
 
-                    return Results.Ok(productsDtos);
+                    return Results.Ok(response);
                 })
             .Produces(StatusCodes.Status200OK)
             //.Produces(StatusCodes.Status400BadRequest)

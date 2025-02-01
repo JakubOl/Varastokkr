@@ -7,7 +7,7 @@ internal class CreateProductEndpoint : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("products",
-                async (CreateUpdateProductRequestDto dto,
+                async (CreateUpdateProductDto dto,
                 ILogger<GetProductsEndpoint> logger,
                 ProductDbContext db) =>
                 {

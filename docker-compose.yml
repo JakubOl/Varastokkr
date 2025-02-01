@@ -42,5 +42,29 @@ services:
           start_period: 10s
         volumes:
           - ./logs:/app/logs
+
+    varastokkr.productsapi:
+        image: ${DOCKER_REGISTRY-}varastokkrproductsapi
+        build:
+          context: .
+          dockerfile: Varastokkr.ProductsAPI/Dockerfile
+        ports: 
+          - "5002:80"
+        depends_on:
+          - sqlserver
+        networks:
+          - my_app_network
+        environment:
+          ASPNETCORE_ENVIRONMENT: "${ASPNETCORE_ENVIRONMENT}"
+          ConnectionStrings__IdentityDbConnectionString: "Server=sqlserver,1433;Database=ProductsDb;User=sa;Password=${SA_PASSWORD};Encrypt=False;"
+          ASPNETCORE_URLS: "http://+:80"
+        healthcheck:
+          test: ["CMD-SHELL", "curl --fail http://localhost:80/health || exit 1"]
+          interval: 30s
+          timeout: 5s
+          retries: 3
+          start_period: 10s
+        volumes:
+          - ./logs:/app/logs
     
 
