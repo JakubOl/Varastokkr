@@ -1,11 +1,6 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Identity;
-using Varastokkr.IdentityAPI.Modelsl;
-using Varastokkr.Shared.Abstract;
+﻿namespace Varastokkr.IdentityAPI.Endpoints;
 
-namespace Varastokkr.IdentityAPI.Endpoints;
-
-public class RegisterEnpoint : IEndpoint
+internal class RegisterEnpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

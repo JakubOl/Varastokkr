@@ -1,11 +1,3 @@
-using Asp.Versioning;
-using FluentValidation;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Varastokkr.IdentityAPI.Infrastructure;
-using Varastokkr.Shared;
-using Varastokkr.Shared.Extensions;
-
 var assembly = typeof(Program).Assembly;
 var builder = WebApplication.CreateBuilder(args);
 

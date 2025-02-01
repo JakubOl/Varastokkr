@@ -1,9 +1,6 @@
-﻿using FluentValidation;
-using Varastokkr.IdentityAPI.Models;
+﻿namespace Varastokkr.IdentityAPI.Validators;
 
-namespace Varastokkr.IdentityAPI.Validators;
-
-public class LoginDtoValidator : AbstractValidator<LoginDto>
+internal class LoginDtoValidator : AbstractValidator<LoginDto>
 {
     public LoginDtoValidator()
     {

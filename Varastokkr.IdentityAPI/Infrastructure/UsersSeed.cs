@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Varastokkr.Shared;
+﻿namespace Varastokkr.IdentityAPI.Infrastructure;
 
-namespace Varastokkr.IdentityAPI.Infrastructure;
-
-public class UsersSeed(ILogger<UsersSeed> logger, UserManager<IdentityUser> userManager) : IDbSeeder<IdentityApiDbContext>
+internal class UsersSeed(ILogger<UsersSeed> logger, UserManager<IdentityUser> userManager) : IDbSeeder<IdentityApiDbContext>
 {
     public async Task SeedAsync(IdentityApiDbContext context)
     {

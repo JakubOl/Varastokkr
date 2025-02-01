@@ -1,0 +1,9 @@
+﻿global using Asp.Versioning;
+global using FluentValidation;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;
+global using Varastokkr.IdentityAPI.Infrastructure;
+global using Varastokkr.Shared;
+global using Varastokkr.Shared.Extensions;
+global using Varastokkr.IdentityAPI.Models;
+global using Varastokkr.Shared.Abstract;
