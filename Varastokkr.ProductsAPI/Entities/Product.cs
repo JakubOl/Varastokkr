@@ -1,6 +1,4 @@
-﻿using Varastokkr.ProductsAPI.Dtos;
-
-namespace Varastokkr.ProductsAPI.Entities;
+﻿namespace Varastokkr.ProductsAPI.Entities;
 
 internal class Product
 {
