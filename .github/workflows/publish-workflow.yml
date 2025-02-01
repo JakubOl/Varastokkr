@@ -4,10 +4,12 @@ on:
   workflow_dispatch:
 
 env:
+  RESOURCE_GROUP: varastokkr
   AZURE_CONTAINER_REGISTRY: varastokkracr
   VARASTOKKR_IDENTITYAPI_CONTAINER_APP_NAME: varastokkr-identityapi
-  RESOURCE_GROUP: varastokkr
   VARASTOKKR_IDENTITYAPI_IMAGE_NAME: varastokkr-identityapi
+  ARASTOKKR_PRODUCTSAPI_CONTAINER_APP_NAME: varastokkr-productsapi
+  VARASTOKKR_PRODUCTSAPI_IMAGE_NAME: varastokkr-productsapi
 
 jobs:
   build-and-deploy:
@@ -25,6 +27,9 @@ jobs:
       - name: Build
         run: dotnet build ./Varastokkr.IdentityAPI --configuration Release
 
+      - name: Build
+        run: dotnet build ./Varastokkr.ProductsAPI --configuration Release
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -35,12 +40,19 @@ jobs:
           username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
           password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
 
-      - name: Build and push Identity.API to ACR
+      - name: Build and push IdentityAPI to ACR
         uses: docker/build-push-action@v6
         with:
           push: true
           tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_IDENTITYAPI_IMAGE_NAME }}:${{ github.sha }}
           file: ./Varastokkr.IdentityAPI/Dockerfile
+
+      - name: Build and push ProductsAPI to ACR
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_PRODUCTSAPI_IMAGE_NAME }}:${{ github.sha }}
+          file: ./Varastokkr.ProductsAPI/Dockerfile
 
       - name: Azure Login
         uses: azure/login@v2
@@ -53,12 +65,25 @@ jobs:
       - name: Register Microsoft.App
         run: az provider register --namespace Microsoft.App --wait
 
-      - name: Deploy Identity.API to Azure Web Container Apps
+      - name: Deploy IdentityAPI to Azure Web Container Apps
         uses: azure/container-apps-deploy-action@v1
         with:
           resourceGroup: ${{ env.RESOURCE_GROUP }}
           containerAppName: ${{ env.VARASTOKKR_IDENTITYAPI_CONTAINER_APP_NAME }}
           imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_IDENTITYAPI_IMAGE_NAME }}:${{ github.sha }}
+          registryCredentials:
+            server=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
+            username=${{ secrets.AZURE_REGISTRY_USERNAME }}
+            password=${{ secrets.AZURE_REGISTRY_PASSWORD }}
+          environmentVariables:
+            ASPNETCORE_ENVIRONMENT=Development
+
+      - name: Deploy ProductsAPI to Azure Web Container Apps
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          resourceGroup: ${{ env.RESOURCE_GROUP }}
+          containerAppName: ${{ env.VARASTOKKR_PRODUCTSAPI_CONTAINER_APP_NAME }}
+          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_PRODUCTSAPI_IMAGE_NAME }}:${{ github.sha }}
           registryCredentials:
             server=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
             username=${{ secrets.AZURE_REGISTRY_USERNAME }}
