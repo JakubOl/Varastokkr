@@ -8,8 +8,8 @@ internal class CreateCategoryEndpoint : IEndpoint
     {
         app.MapPost("products",
                 async (CreateUpdateProductDto dto,
-                ILogger<GetCategoriesEndpoint> logger,
-                ProductDbContext db) =>
+                    ILogger<GetCategoriesEndpoint> logger,
+                    ProductDbContext db) =>
                 {
                     var product = new Product
                     {

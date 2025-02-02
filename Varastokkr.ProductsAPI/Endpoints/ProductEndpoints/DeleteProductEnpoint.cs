@@ -6,8 +6,8 @@ internal class DeleteCategoryEnpoint : IEndpoint
     {
         app.MapDelete("products/{id:Guid}",
                 async (Guid id,
-                ILogger<GetCategoriesEndpoint> logger,
-                ProductDbContext db) =>
+                    ILogger<GetCategoriesEndpoint> logger,
+                    ProductDbContext db) =>
                 {
                     var product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
 

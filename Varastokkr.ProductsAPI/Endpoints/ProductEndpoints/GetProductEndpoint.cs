@@ -6,8 +6,8 @@ internal class GetCategoryEndpoint : IEndpoint
     {
         app.MapGet("products/{id:Guid}",
                 async (Guid id,
-                ILogger<GetCategoriesEndpoint> logger,
-                ProductDbContext db) =>
+                    ILogger<GetCategoriesEndpoint> logger,
+                    ProductDbContext db) =>
                 {
                     var product = await db.Products
                         .Include(x => x.Category)

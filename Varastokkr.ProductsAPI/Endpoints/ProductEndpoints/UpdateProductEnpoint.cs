@@ -6,9 +6,9 @@ internal class UpdateProductEndpoint : IEndpoint
     {
         app.MapPost("products/{id:Guid}",
                 async (Guid id, 
-                CreateUpdateProductDto dto,
-                ILogger<GetCategoriesEndpoint> logger,
-                ProductDbContext db) =>
+                    CreateUpdateProductDto dto,
+                    ILogger<GetCategoriesEndpoint> logger,
+                    ProductDbContext db) =>
                 {
                     var product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
 

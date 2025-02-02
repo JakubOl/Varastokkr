@@ -6,8 +6,8 @@ internal class GetCategoriesEndpoint : IEndpoint
     {
         app.MapGet("products",
                 async (GetProductsDto dto,
-                ILogger<GetCategoriesEndpoint> logger,
-                ProductDbContext db) =>
+                    ILogger<GetCategoriesEndpoint> logger,
+                    ProductDbContext db) =>
                 {
                     var query = db.Products
                         .Include(p => p.Category)
