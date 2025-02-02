@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using Varastokkr.Shared.Extensions;
 using Varastokkr.Shared;
+using Varastokkr.IdentityAPI.Infrastructure;
 
 var assembly = typeof(Program).Assembly;
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,7 @@ builder.Services.AddAuthorization();
 
 var dbConnectionString = builder.Configuration.GetConnectionString("ProductDbConnectionString");
 builder.Services.AddDbContext<ProductDbContext>(options => options.UseSqlServer(dbConnectionString));
-builder.Services.AddMigration<ProductDbContext>();
+builder.Services.AddMigration<ProductDbContext, DbSeed>();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
