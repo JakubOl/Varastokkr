@@ -14,7 +14,7 @@ internal class DeleteCategoryEnpoint : IEndpoint
                     if (category == null)
                         return Results.BadRequest($"Category with id: {id} does not exist.");
 
-                    var productsWithCategoryCount = await db.Products.CountAsync(p => p.CategoryId = id);
+                    var productsWithCategoryCount = await db.Products.CountAsync(p => p.CategoryId == id);
 
                     if (productsWithCategoryCount > 0)
                         return Results.BadRequest($"Category {category.Name} can't be deleted. There are {productsWithCategoryCount} products with this category.");

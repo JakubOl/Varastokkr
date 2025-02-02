@@ -12,7 +12,7 @@ internal class Product
     [Column(TypeName = "decimal(18,2)")]
     public decimal Price { get; set; }
 
-    public int CategoryId { get; set; }
+    public Guid CategoryId { get; set; }
     public virtual Category Category { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
