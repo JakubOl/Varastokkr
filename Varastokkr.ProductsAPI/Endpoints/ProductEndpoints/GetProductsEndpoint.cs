@@ -34,8 +34,6 @@ internal class GetCategoriesEndpoint : IEndpoint
                     return Results.Ok(response);
                 })
             .Produces(StatusCodes.Status200OK)
-            //.Produces(StatusCodes.Status400BadRequest)
-            //.Produces(StatusCodes.Status401Unauthorized)
             .WithName("GetProducts")
             .WithOpenApi(operation =>
             {

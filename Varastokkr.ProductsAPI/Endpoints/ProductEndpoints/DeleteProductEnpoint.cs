@@ -20,8 +20,7 @@ internal class DeleteCategoryEnpoint : IEndpoint
                     return Results.Ok(new { message = "Product deleted successfully!" });
                 })
             .Produces(StatusCodes.Status200OK)
-            //.Produces(StatusCodes.Status400BadRequest)
-            //.Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status400BadRequest)
             .WithName("DeleteProduct")
             .WithOpenApi(operation =>
             {

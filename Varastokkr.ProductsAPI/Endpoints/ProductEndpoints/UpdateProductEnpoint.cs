@@ -26,8 +26,7 @@ internal class UpdateProductEndpoint : IEndpoint
                     return Results.Ok(product);
                 })
             .Produces(StatusCodes.Status200OK)
-            //.Produces(StatusCodes.Status400BadRequest)
-            //.Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status400BadRequest)
             .WithName("UpdateProduct")
             .WithOpenApi(operation =>
             {

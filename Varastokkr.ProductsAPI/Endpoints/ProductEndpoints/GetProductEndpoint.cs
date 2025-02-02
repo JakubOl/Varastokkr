@@ -21,8 +21,7 @@ internal class GetCategoryEndpoint : IEndpoint
                     return Results.Ok(productDto);
                 })
             .Produces(StatusCodes.Status200OK)
-            //.Produces(StatusCodes.Status400BadRequest)
-            //.Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status400BadRequest)
             .WithName("GetProduct")
             .WithOpenApi(operation =>
             {

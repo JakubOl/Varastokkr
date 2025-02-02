@@ -23,8 +23,6 @@ internal class CreateCategoryEndpoint : IEndpoint
                     return Results.Created($"/categories/{category.Id}", result);
                 })
             .Produces(StatusCodes.Status201Created)
-            //.Produces(StatusCodes.Status400BadRequest)
-            //.Produces(StatusCodes.Status401Unauthorized)
             .WithName("CreateCategory")
             .WithOpenApi(operation =>
             {
