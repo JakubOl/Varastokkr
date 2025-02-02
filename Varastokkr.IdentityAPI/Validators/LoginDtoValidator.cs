@@ -1,6 +1,6 @@
 ﻿namespace Varastokkr.IdentityAPI.Validators;
 
-internal class LoginDtoValidator : AbstractValidator<LoginDto>
+public class LoginDtoValidator : AbstractValidator<LoginDto>
 {
     public LoginDtoValidator()
     {

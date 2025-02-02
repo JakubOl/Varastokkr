@@ -5,7 +5,7 @@ internal class GetCategoriesEndpoint : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("categories",
-                async (GetCategoriesDto dto,
+                async ([AsParameters] GetCategoriesDto dto,
                     ILogger<GetCategoriesEndpoint> logger,
                     ProductDbContext db) =>
                 {
@@ -22,7 +22,7 @@ internal class GetCategoriesEndpoint : IEndpoint
 
                     var categories = await query
                         .OrderBy(p => p.Name)
-                        .Skip((dto.PageSize - 1) * dto.PageSize)
+                        .Skip((dto.Page - 1) * dto.PageSize)
                         .Take(dto.PageSize)
                         .AsNoTracking()
                         .ToListAsync();

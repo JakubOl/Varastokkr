@@ -18,6 +18,7 @@ internal class CreateCategoryEndpoint : IEndpoint
                         Name = dto.Name,
                         Description = dto.Description,
                         Price = dto.Price,
+                        CategoryId = dto.CategoryId,
                         CreatedAt = DateTime.UtcNow,
                         UpdatedAt = DateTime.UtcNow,
                     };

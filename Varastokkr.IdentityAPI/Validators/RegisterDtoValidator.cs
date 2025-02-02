@@ -1,6 +1,6 @@
 ﻿namespace Varastokkr.IdentityAPI.Validators;
 
-internal class RegisterDtoValidator : AbstractValidator<RegisterDto>
+public class RegisterDtoValidator : AbstractValidator<RegisterDto>
 {
     public RegisterDtoValidator()
     {
