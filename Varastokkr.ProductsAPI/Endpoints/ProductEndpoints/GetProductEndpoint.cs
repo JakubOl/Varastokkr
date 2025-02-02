@@ -1,15 +1,20 @@
-﻿namespace Varastokkr.ProductsAPI.Endpoints;
+﻿namespace Varastokkr.ProductsAPI.Endpoints.ProductEndpoints;
 
-internal class GetProductEndpoint : IEndpoint
+internal class GetCategoryEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("products/{id:Guid}",
                 async (Guid id,
-                ILogger<GetProductsEndpoint> logger,
+                ILogger<GetCategoriesEndpoint> logger,
                 ProductDbContext db) =>
                 {
-                    var product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
+                    var product = await db.Products
+                        .Include(x => x.Category)
+                        .FirstOrDefaultAsync(p => p.Id == id);
+
+                    if (product == null)
+                        return Results.BadRequest($"Product with id: {id} does not exist.");
 
                     var productDto = product.MapToDto();
 

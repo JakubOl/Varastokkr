@@ -1,12 +1,12 @@
-﻿namespace Varastokkr.ProductsAPI.Endpoints;
+﻿namespace Varastokkr.ProductsAPI.Endpoints.ProductEndpoints;
 
-internal class DeleteProductEnpoint : IEndpoint
+internal class DeleteCategoryEnpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapDelete("products/{id:Guid}",
                 async (Guid id,
-                ILogger<GetProductsEndpoint> logger,
+                ILogger<GetCategoriesEndpoint> logger,
                 ProductDbContext db) =>
                 {
                     var product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);

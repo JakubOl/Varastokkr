@@ -1,4 +1,4 @@
-﻿namespace Varastokkr.ProductsAPI.Endpoints;
+﻿namespace Varastokkr.ProductsAPI.Endpoints.ProductEndpoints;
 
 internal class UpdateProductEndpoint : IEndpoint
 {
@@ -7,7 +7,7 @@ internal class UpdateProductEndpoint : IEndpoint
         app.MapPost("products/{id:Guid}",
                 async (Guid id, 
                 CreateUpdateProductDto dto,
-                ILogger<GetProductsEndpoint> logger,
+                ILogger<GetCategoriesEndpoint> logger,
                 ProductDbContext db) =>
                 {
                     var product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);

@@ -3,3 +3,7 @@ global using Microsoft.EntityFrameworkCore;
 global using Varastokkr.ProductsAPI.Dtos;
 global using Varastokkr.ProductsAPI.Infrastructure;
 global using Varastokkr.Shared.Abstract;
+global using Varastokkr.ProductsAPI.Endpoints.ProductEndpoints;
+global using Varastokkr.ProductsAPI.Endpoints.CategoryEndpoints;
+global using Varastokkr.CategorysAPI.Dtos;
+global using Varastokkr.ProductsAPI.Entities;

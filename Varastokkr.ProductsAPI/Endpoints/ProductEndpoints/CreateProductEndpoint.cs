@@ -1,14 +1,14 @@
 ﻿using Varastokkr.ProductsAPI.Entities;
 
-namespace Varastokkr.ProductsAPI.Endpoints;
+namespace Varastokkr.ProductsAPI.Endpoints.ProductEndpoints;
 
-internal class CreateProductEndpoint : IEndpoint
+internal class CreateCategoryEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("products",
                 async (CreateUpdateProductDto dto,
-                ILogger<GetProductsEndpoint> logger,
+                ILogger<GetCategoriesEndpoint> logger,
                 ProductDbContext db) =>
                 {
                     var product = new Product
