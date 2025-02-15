@@ -14,14 +14,14 @@ internal class GetCategoryEndpoint : IEndpoint
                         .FirstOrDefaultAsync(p => p.Id == id);
 
                     if (product == null)
-                        return Results.BadRequest($"Product with id: {id} does not exist.");
+                        return Results.NotFound($"Product with id: {id} does not exist.");
 
                     var productDto = product.MapToDto();
 
                     return Results.Ok(productDto);
                 })
             .Produces(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status404NotFound)
             .WithName("GetProduct")
             .WithOpenApi(operation =>
             {

@@ -11,6 +11,13 @@ internal class CreateCategoryEndpoint : IEndpoint
                     ILogger<GetCategoriesEndpoint> logger,
                     ProductDbContext db) =>
                 {
+                    var productWithNameExists = await db.Products.AnyAsync(p => p.Name == dto.Name);
+                    if (productWithNameExists)
+                        return Results.BadRequest($"Product with name: {dto.Name} already exists.");
+
+                    if (dto.Price <= 0)
+                        return Results.BadRequest($"Invalid product price: {dto.Price}.");
+
                     var product = new Product
                     {
                         Id = Guid.NewGuid(),
@@ -26,10 +33,12 @@ internal class CreateCategoryEndpoint : IEndpoint
                     var result = await db.Products.AddAsync(product);
                     await db.SaveChangesAsync();
 
+                    // Send event && Update cache
+
                     return Results.Created($"/products/{product.Id}", result);
                 })
             .Produces(StatusCodes.Status201Created)
-            //.Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status400BadRequest)
             //.Produces(StatusCodes.Status401Unauthorized)
             .WithName("CreateProduct")
             .WithOpenApi(operation =>

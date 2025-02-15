@@ -35,8 +35,8 @@ internal class DbSeed(ILogger<DbSeed> logger) : IDbSeeder<ProductDbContext>
             .Select(g => g.First())
             .ToList();
 
-        context.Categories.AddRange(categories);
-        context.SaveChanges();
+        await context.Categories.AddRangeAsync(categories);
+        await context.SaveChangesAsync();
     }
 
     private async Task SeedProducts(ProductDbContext context)
@@ -61,7 +61,7 @@ internal class DbSeed(ILogger<DbSeed> logger) : IDbSeeder<ProductDbContext>
 
         var products = productFaker.Generate(50);
 
-        context.Products.AddRange(products);
-        context.SaveChanges();
+        await context.Products.AddRangeAsync(products);
+        await context.SaveChangesAsync();
     }
 }

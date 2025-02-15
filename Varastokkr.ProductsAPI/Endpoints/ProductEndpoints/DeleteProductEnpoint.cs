@@ -12,15 +12,18 @@ internal class DeleteCategoryEnpoint : IEndpoint
                     var product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
 
                     if (product == null)
-                        return Results.BadRequest($"Product with id: {id} does not exist.");
+                        return Results.NotFound($"Product with id: {id} does not exist.");
 
                     db.Products.Remove(product);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
+
+                    // Send event && Update cache
 
                     return Results.Ok(new { message = "Product deleted successfully!" });
                 })
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status404NotFound)
             .WithName("DeleteProduct")
             .WithOpenApi(operation =>
             {

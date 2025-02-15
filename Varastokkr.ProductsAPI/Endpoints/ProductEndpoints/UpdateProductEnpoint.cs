@@ -11,9 +11,12 @@ internal class UpdateProductEndpoint : IEndpoint
                     ProductDbContext db) =>
                 {
                     var product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
-
                     if (product == null)
-                        return Results.BadRequest($"Product with id: {id} does not exist.");
+                        return Results.NotFound($"Product with id: {id} does not exist.");
+
+                    var productWithNameExists = await db.Products.AnyAsync(p => p.Name == dto.Name && p.Id != product.Id);
+                    if (productWithNameExists)
+                        return Results.BadRequest($"Product with name: {dto.Name} already exists.");
 
                     product.Sku = dto.Sku;
                     product.Name = dto.Name;
@@ -23,10 +26,13 @@ internal class UpdateProductEndpoint : IEndpoint
 
                     await db.SaveChangesAsync();
 
+                    // Send event && Update cache
+
                     return Results.Ok(product);
                 })
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status404NotFound)
             .WithName("UpdateProduct")
             .WithOpenApi(operation =>
             {

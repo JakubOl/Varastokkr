@@ -13,12 +13,12 @@ internal class GetCategoryEndpoint : IEndpoint
                         .FirstOrDefaultAsync(p => p.Id == id);
 
                     if (category == null)
-                        return Results.BadRequest($"Category with id: {id} does not exist.");
+                        return Results.NotFound($"Category with id: {id} does not exist.");
 
                     return Results.Ok(category);
                 })
             .Produces(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status404NotFound)
             .WithName("GetCategory")
             .WithOpenApi(operation =>
             {

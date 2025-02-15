@@ -10,22 +10,23 @@ internal class DeleteCategoryEnpoint : IEndpoint
                     ProductDbContext db) =>
                 {
                     var category = await db.Categories.FirstOrDefaultAsync(p => p.Id == id);
-
                     if (category == null)
-                        return Results.BadRequest($"Category with id: {id} does not exist.");
+                        return Results.NotFound($"Category with id: {id} does not exist.");
 
-                    var productsWithCategoryCount = await db.Products.CountAsync(p => p.CategoryId == id);
-
-                    if (productsWithCategoryCount > 0)
-                        return Results.BadRequest($"Category {category.Name} can't be deleted. There are {productsWithCategoryCount} products with this category.");
+                    var productsWithCategoryExists = await db.Products.AnyAsync(p => p.CategoryId == id);
+                    if (productsWithCategoryExists)
+                        return Results.BadRequest($"Category {category.Name} can't be deleted. There are products with this category.");
 
                     db.Categories.Remove(category);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
+
+                    // Send event && Update cache
 
                     return Results.Ok(new { message = "Category deleted successfully!" });
                 })
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status404NotFound)
             .WithName("DeleteCategory")
             .WithOpenApi(operation =>
             {
