@@ -1,11 +1,13 @@
-﻿namespace Varastokkr.ProductAPI.Endpoints.ProductEndpoints;
+﻿using Varastokkr.Shared.Models;
+
+namespace Varastokkr.ProductAPI.Endpoints.ProductEndpoints;
 
 internal class GetCategoriesEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("products",
-                async ([AsParameters] GetProductsDto dto,
+                async ([AsParameters] QueryParametersDto dto,
                     ILogger<GetCategoriesEndpoint> logger,
                     ProductDbContext db) =>
                 {
@@ -29,7 +31,7 @@ internal class GetCategoriesEndpoint : IEndpoint
                         .AsNoTracking()
                         .ToListAsync();
 
-                    var response = new ProductsDto(products.Select(x => x.MapToDto()), productsCount);
+                    var response = new PaginatedResult<ProductDto>(products.Select(x => x.MapToDto()), productsCount);
 
                     return Results.Ok(response);
                 })

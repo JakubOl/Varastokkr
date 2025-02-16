@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Varastokkr.InventoryAPI.Infrastructure;
 using Varastokkr.Shared.Abstract;
+using Varastokkr.Shared.Models;
 
 namespace Varastokkr.InventoryAPI.Endpoints;
 
@@ -10,14 +11,18 @@ internal class GetInventoryTransactionsEndpoint : IEndpoint
     {
         app.MapGet("inventory/{id:Guid}/transactions",
                 async (Guid id,
-                    ILogger<GetInventoryEnpoint> logger,
+                    [AsParameters] QueryParametersDto dto,
+                    ILogger <GetInventoryEnpoint> logger,
                     InventoryDbContext db) =>
                 {
                     var inventoryTransactions = await db.InventoryTransactions
-                         .Where(t => t.InventoryId == id)
-                         .OrderByDescending(t => t.TransactionDate)
-                         .AsNoTracking()
-                         .ToListAsync();
+                        .Where(t => t.InventoryId == id 
+                            && (string.IsNullOrEmpty(dto.SearchPhrase) || t.Comment.Contains(dto.SearchPhrase, StringComparison.InvariantCultureIgnoreCase)))
+                        .OrderByDescending(t => t.TransactionDate)
+                        .Skip((dto.Page - 1) * dto.PageSize)
+                        .Take(dto.PageSize)
+                        .AsNoTracking()
+                        .ToListAsync();
 
                     return Results.Ok(inventoryTransactions);
                 })

@@ -9,6 +9,7 @@ internal class Inventory
     public Guid Id { get; set; }
     public Guid ProductId { get; set; }
     public int WarehouseId { get; set; }
+     
     public int OnHandQuantity { get; set; }
     public int ReservedQuantity { get; set; }
     public int ReorderThreshold { get; set; }

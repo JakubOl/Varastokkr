@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Varastokkr.InventoryAPI.Dtos;
-using Varastokkr.InventoryAPI.Endpoints;
 using Varastokkr.InventoryAPI.Entities;
 using Varastokkr.InventoryAPI.Enums;
 using Varastokkr.InventoryAPI.Infrastructure;

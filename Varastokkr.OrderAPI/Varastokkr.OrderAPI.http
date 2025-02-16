@@ -1,0 +1,6 @@
+@Varastokkr.OrderAPI_HostAddress = http://localhost:5137
+
+GET {{Varastokkr.OrderAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
