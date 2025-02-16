@@ -1,9 +1,9 @@
 ﻿global using FluentValidation;
 global using Microsoft.EntityFrameworkCore;
-global using Varastokkr.ProductsAPI.Dtos;
-global using Varastokkr.ProductsAPI.Infrastructure;
+global using Varastokkr.ProductAPI.Dtos;
+global using Varastokkr.ProductAPI.Infrastructure;
 global using Varastokkr.Shared.Abstract;
-global using Varastokkr.ProductsAPI.Endpoints.ProductEndpoints;
-global using Varastokkr.ProductsAPI.Endpoints.CategoryEndpoints;
+global using Varastokkr.ProductAPI.Endpoints.ProductEndpoints;
+global using Varastokkr.ProductAPI.Endpoints.CategoryEndpoints;
 global using Varastokkr.CategorysAPI.Dtos;
-global using Varastokkr.ProductsAPI.Entities;
+global using Varastokkr.ProductAPI.Entities;

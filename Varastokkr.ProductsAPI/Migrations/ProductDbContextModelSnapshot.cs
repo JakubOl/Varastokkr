@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Varastokkr.ProductsAPI.Infrastructure;
+using Varastokkr.ProductAPI.Infrastructure;
 
 #nullable disable
 
-namespace Varastokkr.ProductsAPI.Migrations
+namespace Varastokkr.ProductAPI.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
     partial class ProductDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace Varastokkr.ProductsAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Varastokkr.ProductsAPI.Entities.Category", b =>
+            modelBuilder.Entity("Varastokkr.ProductAPI.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -49,7 +49,7 @@ namespace Varastokkr.ProductsAPI.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Varastokkr.ProductsAPI.Entities.Product", b =>
+            modelBuilder.Entity("Varastokkr.ProductAPI.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,9 +86,9 @@ namespace Varastokkr.ProductsAPI.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Varastokkr.ProductsAPI.Entities.Product", b =>
+            modelBuilder.Entity("Varastokkr.ProductAPI.Entities.Product", b =>
                 {
-                    b.HasOne("Varastokkr.ProductsAPI.Entities.Category", "Category")
+                    b.HasOne("Varastokkr.ProductAPI.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)

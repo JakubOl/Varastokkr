@@ -1,4 +1,4 @@
-﻿namespace Varastokkr.ProductsAPI.Endpoints.CategoryEndpoints;
+﻿namespace Varastokkr.ProductAPI.Endpoints.CategoryEndpoints;
 
 internal class UpdateProductEndpoint : IEndpoint
 {

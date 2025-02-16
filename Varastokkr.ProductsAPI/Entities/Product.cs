@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Varastokkr.ProductsAPI.Entities;
+namespace Varastokkr.ProductAPI.Entities;
 
 internal class Product
 {

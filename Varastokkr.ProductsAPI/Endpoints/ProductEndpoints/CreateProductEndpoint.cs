@@ -1,6 +1,6 @@
-﻿using Varastokkr.ProductsAPI.Entities;
+﻿using Varastokkr.ProductAPI.Entities;
 
-namespace Varastokkr.ProductsAPI.Endpoints.ProductEndpoints;
+namespace Varastokkr.ProductAPI.Endpoints.ProductEndpoints;
 
 internal class CreateCategoryEndpoint : IEndpoint
 {

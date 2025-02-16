@@ -8,8 +8,10 @@ env:
   AZURE_CONTAINER_REGISTRY: varastokkracr
   VARASTOKKR_IDENTITYAPI_CONTAINER_APP_NAME: varastokkr-identityapi
   VARASTOKKR_IDENTITYAPI_IMAGE_NAME: varastokkr-identityapi
-  ARASTOKKR_PRODUCTSAPI_CONTAINER_APP_NAME: varastokkr-productsapi
-  VARASTOKKR_PRODUCTSAPI_IMAGE_NAME: varastokkr-productsapi
+  ARASTOKKR_PRODUCTAPI_CONTAINER_APP_NAME: varastokkr-productapi
+  VARASTOKKR_PRODUCTAPI_IMAGE_NAME: varastokkr-productapi
+  ARASTOKKR_INVENTORYAPI_CONTAINER_APP_NAME: varastokkr-inventoryapi
+  VARASTOKKR_INVENTORYAPI_IMAGE_NAME: varastokkr-inventoryapi
 
 jobs:
   build-and-deploy:
@@ -24,11 +26,14 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - name: Build
+      - name: Build IdentityAPI
         run: dotnet build ./Varastokkr.IdentityAPI --configuration Release
 
-      - name: Build
-        run: dotnet build ./Varastokkr.ProductsAPI --configuration Release
+      - name: Build ProductAPI
+        run: dotnet build ./Varastokkr.ProductAPI --configuration Release
+
+      - name: Build InventoryAPI
+        run: dotnet build ./Varastokkr.InventoryAPI --configuration Release
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -47,12 +52,19 @@ jobs:
           tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_IDENTITYAPI_IMAGE_NAME }}:${{ github.sha }}
           file: ./Varastokkr.IdentityAPI/Dockerfile
 
-      - name: Build and push ProductsAPI to ACR
+      - name: Build and push ProductAPI to ACR
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_PRODUCTSAPI_IMAGE_NAME }}:${{ github.sha }}
-          file: ./Varastokkr.ProductsAPI/Dockerfile
+          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_PRODUCTAPI_IMAGE_NAME }}:${{ github.sha }}
+          file: ./Varastokkr.ProductAPI/Dockerfile
+
+      - name: Build and push InventoryAPI to ACR
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_INVENTORYAPI_IMAGE_NAME }}:${{ github.sha }}
+          file: ./Varastokkr.InventoryAPI/Dockerfile
 
       - name: Azure Login
         uses: azure/login@v2
@@ -78,12 +90,25 @@ jobs:
           environmentVariables:
             ASPNETCORE_ENVIRONMENT=Development
 
-      - name: Deploy ProductsAPI to Azure Web Container Apps
+      - name: Deploy ProductAPI to Azure Web Container Apps
         uses: azure/container-apps-deploy-action@v1
         with:
           resourceGroup: ${{ env.RESOURCE_GROUP }}
-          containerAppName: ${{ env.VARASTOKKR_PRODUCTSAPI_CONTAINER_APP_NAME }}
-          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_PRODUCTSAPI_IMAGE_NAME }}:${{ github.sha }}
+          containerAppName: ${{ env.VARASTOKKR_PRODUCTAPI_CONTAINER_APP_NAME }}
+          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_PRODUCTAPI_IMAGE_NAME }}:${{ github.sha }}
+          registryCredentials:
+            server=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
+            username=${{ secrets.AZURE_REGISTRY_USERNAME }}
+            password=${{ secrets.AZURE_REGISTRY_PASSWORD }}
+          environmentVariables:
+            ASPNETCORE_ENVIRONMENT=Development
+
+      - name: Deploy InventoryAPI to Azure Web Container Apps
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          resourceGroup: ${{ env.RESOURCE_GROUP }}
+          containerAppName: ${{ env.VARASTOKKR_INVENTORYAPI_CONTAINER_APP_NAME }}
+          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.VARASTOKKR_INVENTORYAPI_IMAGE_NAME }}:${{ github.sha }}
           registryCredentials:
             server=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
             username=${{ secrets.AZURE_REGISTRY_USERNAME }}

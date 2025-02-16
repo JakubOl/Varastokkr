@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Varastokkr.ProductsAPI.Migrations
+namespace Varastokkr.ProductAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class ProductsAPIInitmigration : Migration
+    public partial class ProductAPIInitmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

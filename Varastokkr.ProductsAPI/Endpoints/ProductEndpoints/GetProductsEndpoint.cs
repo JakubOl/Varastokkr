@@ -1,4 +1,4 @@
-﻿namespace Varastokkr.ProductsAPI.Endpoints.ProductEndpoints;
+﻿namespace Varastokkr.ProductAPI.Endpoints.ProductEndpoints;
 
 internal class GetCategoriesEndpoint : IEndpoint
 {

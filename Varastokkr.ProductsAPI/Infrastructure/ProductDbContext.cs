@@ -1,4 +1,4 @@
-﻿namespace Varastokkr.ProductsAPI.Infrastructure;
+﻿namespace Varastokkr.ProductAPI.Infrastructure;
 
 internal class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbContext(options)
 {

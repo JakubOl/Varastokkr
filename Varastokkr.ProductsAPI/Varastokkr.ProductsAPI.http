@@ -1,6 +1,6 @@
-@Varastokkr.ProductsAPI_HostAddress = http://localhost:5033
+@Varastokkr.ProductAPI_HostAddress = http://localhost:5033
 
-GET {{Varastokkr.ProductsAPI_HostAddress}}/weatherforecast/
+GET {{Varastokkr.ProductAPI_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###

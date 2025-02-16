@@ -10,19 +10,19 @@ WORKDIR /src
 COPY ["Directory.Packages.props", "."]
 COPY ["Directory.Build.props", "."]
 
-COPY ["Varastokkr.ProductsAPI/Varastokkr.ProductsAPI.csproj", "Varastokkr.ProductsAPI/"]
+COPY ["Varastokkr.ProductAPI/Varastokkr.ProductAPI.csproj", "Varastokkr.ProductAPI/"]
 COPY ["Varastokkr.Shared/Varastokkr.Shared.csproj", "Varastokkr.Shared/"]
 
-RUN dotnet restore "./Varastokkr.ProductsAPI/Varastokkr.ProductsAPI.csproj"
+RUN dotnet restore "./Varastokkr.ProductAPI/Varastokkr.ProductAPI.csproj"
 COPY . .
 
-RUN dotnet build "Varastokkr.ProductsAPI/Varastokkr.ProductsAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "Varastokkr.ProductAPI/Varastokkr.ProductAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "Varastokkr.ProductsAPI/Varastokkr.ProductsAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Varastokkr.ProductAPI/Varastokkr.ProductAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Varastokkr.ProductsAPI.dll"]
+ENTRYPOINT ["dotnet", "Varastokkr.ProductAPI.dll"]
