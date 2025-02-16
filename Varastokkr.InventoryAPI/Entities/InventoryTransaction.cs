@@ -7,7 +7,7 @@ internal class InventoryTransaction
 {
     [Key]
     public int Id { get; set; }
-    public int InventoryId { get; set; }
+    public Guid InventoryId { get; set; }
     public InventoryTransactionType TransactionType { get; set; }
     public int Quantity { get; set; }
     public DateTime TransactionDate { get; set; }

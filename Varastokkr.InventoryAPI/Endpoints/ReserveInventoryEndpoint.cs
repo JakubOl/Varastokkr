@@ -7,11 +7,11 @@ using Varastokkr.Shared.Abstract;
 
 namespace Varastokkr.InventoryAPI.Endpoints;
 
-internal class AdjustInventoryEndpoint : IEndpoint
+internal class ReserveInventoryEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("inventory/{id:Guid}/adjust",
+        app.MapPost("inventory/{id:Guid}/reserve",
                 async (Guid id,
                     InventoryDto dto,
                     ILogger<GetInventoryEnpoint> logger,
@@ -24,31 +24,35 @@ internal class AdjustInventoryEndpoint : IEndpoint
                     if (inventory == null)
                         return Results.NotFound($"Inventory for product with id: {id} does not exist.");
 
-                    inventory.OnHandQuantity = dto.Quantity;
+                    if (inventory.AvailableQuantity - dto.Quantity <= 0)
+                        return Results.BadRequest($"Not enough available quantity. Available: {inventory.AvailableQuantity}.");
+
+                    inventory.ReservedQuantity += dto.Quantity;
                     inventory.LastUpdated = DateTime.UtcNow;
 
                     // Event?
                     var transaction = new InventoryTransaction
                     {
                         InventoryId = inventory.Id,
-                        TransactionType = InventoryTransactionType.Adjustment,
+                        TransactionType = InventoryTransactionType.Reservation,
                         Quantity = dto.Quantity,
                         TransactionDate = DateTime.UtcNow,
-                        Comment = "Inventory adjusted"
+                        Comment = "Inventory reserved"
                     };
 
                     await db.InventoryTransactions.AddAsync(transaction);
                     await db.SaveChangesAsync();
 
-                    return Results.Ok("Inventory adjusted successfully.");
+                    return Results.Ok("Inventory reserved successfully.");
                 })
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithName("AdjustProductInventory")
+            .Produces(StatusCodes.Status404NotFound)
+            .WithName("ReserveProductInventory")
             .WithOpenApi(operation =>
             {
-                operation.Summary = "Adjust product inventory endpoint";
-                operation.Description = "Adjusts inventory for product.";
+                operation.Summary = "Reserve product inventory endpoint";
+                operation.Description = "Reserves inventory for product.";
                 return operation;
             });
     }

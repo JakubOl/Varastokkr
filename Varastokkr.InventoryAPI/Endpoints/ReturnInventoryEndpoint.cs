@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Varastokkr.InventoryAPI.Dtos;
+using Varastokkr.InventoryAPI.Endpoints;
 using Varastokkr.InventoryAPI.Entities;
 using Varastokkr.InventoryAPI.Enums;
 using Varastokkr.InventoryAPI.Infrastructure;
@@ -7,11 +8,11 @@ using Varastokkr.Shared.Abstract;
 
 namespace Varastokkr.InventoryAPI.Endpoints;
 
-internal class AdjustInventoryEndpoint : IEndpoint
+internal class ReturnInventoryEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("inventory/{id:Guid}/adjust",
+        app.MapPost("inventory/{id:Guid}/return",
                 async (Guid id,
                     InventoryDto dto,
                     ILogger<GetInventoryEnpoint> logger,
@@ -24,31 +25,32 @@ internal class AdjustInventoryEndpoint : IEndpoint
                     if (inventory == null)
                         return Results.NotFound($"Inventory for product with id: {id} does not exist.");
 
-                    inventory.OnHandQuantity = dto.Quantity;
+                    inventory.OnHandQuantity += dto.Quantity;
                     inventory.LastUpdated = DateTime.UtcNow;
 
                     // Event?
                     var transaction = new InventoryTransaction
                     {
                         InventoryId = inventory.Id,
-                        TransactionType = InventoryTransactionType.Adjustment,
+                        TransactionType = InventoryTransactionType.Return,
                         Quantity = dto.Quantity,
                         TransactionDate = DateTime.UtcNow,
-                        Comment = "Inventory adjusted"
+                        Comment = "Inventory returned"
                     };
 
                     await db.InventoryTransactions.AddAsync(transaction);
                     await db.SaveChangesAsync();
 
-                    return Results.Ok("Inventory adjusted successfully.");
+                    return Results.Ok("Inventory returned successfully.");
                 })
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithName("AdjustProductInventory")
+            .Produces(StatusCodes.Status404NotFound)
+            .WithName("ReturnProductInventory")
             .WithOpenApi(operation =>
             {
-                operation.Summary = "Adjust product inventory endpoint";
-                operation.Description = "Adjusts inventory for product.";
+                operation.Summary = "Return product endpoint";
+                operation.Description = "Returns inventory for product.";
                 return operation;
             });
     }

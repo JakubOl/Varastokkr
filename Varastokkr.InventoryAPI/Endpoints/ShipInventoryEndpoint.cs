@@ -7,11 +7,11 @@ using Varastokkr.Shared.Abstract;
 
 namespace Varastokkr.InventoryAPI.Endpoints;
 
-internal class AdjustInventoryEndpoint : IEndpoint
+internal class ShipInventoryEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("inventory/{id:Guid}/adjust",
+        app.MapPost("inventory/{id:Guid}/ship",
                 async (Guid id,
                     InventoryDto dto,
                     ILogger<GetInventoryEnpoint> logger,
@@ -24,31 +24,36 @@ internal class AdjustInventoryEndpoint : IEndpoint
                     if (inventory == null)
                         return Results.NotFound($"Inventory for product with id: {id} does not exist.");
 
-                    inventory.OnHandQuantity = dto.Quantity;
+                    if (inventory.ReservedQuantity < dto.Quantity)
+                        return Results.BadRequest($"Not enough reserved quantity. Reserved: {inventory.AvailableQuantity}.");
+
+                    inventory.ReservedQuantity -= dto.Quantity;
+                    inventory.OnHandQuantity -= dto.Quantity;
                     inventory.LastUpdated = DateTime.UtcNow;
 
                     // Event?
                     var transaction = new InventoryTransaction
                     {
                         InventoryId = inventory.Id,
-                        TransactionType = InventoryTransactionType.Adjustment,
-                        Quantity = dto.Quantity,
+                        TransactionType = InventoryTransactionType.Shipment,
+                        Quantity = -dto.Quantity,
                         TransactionDate = DateTime.UtcNow,
-                        Comment = "Inventory adjusted"
+                        Comment = "Inventory shipped"
                     };
 
                     await db.InventoryTransactions.AddAsync(transaction);
                     await db.SaveChangesAsync();
 
-                    return Results.Ok("Inventory adjusted successfully.");
+                    return Results.Ok("Inventory shipped successfully.");
                 })
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithName("AdjustProductInventory")
+            .Produces(StatusCodes.Status404NotFound)
+            .WithName("ShipProductInventory")
             .WithOpenApi(operation =>
             {
-                operation.Summary = "Adjust product inventory endpoint";
-                operation.Description = "Adjusts inventory for product.";
+                operation.Summary = "Ship product endpoint";
+                operation.Description = "Ships inventory for product.";
                 return operation;
             });
     }

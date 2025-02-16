@@ -16,7 +16,7 @@ internal class CreateInventoryEndpoint : IEndpoint
                     ILogger<GetInventoryEnpoint> logger,
                     InventoryDbContext db) =>
                 {
-                    if (dto.OnHandQuantity < 0)
+                    if (dto.Quantity < 0)
                         return Results.BadRequest($"Quantity cannot be less than 0.");
 
                     var existing = await db.Inventories.FirstOrDefaultAsync(i => i.ProductId == id);
@@ -26,7 +26,7 @@ internal class CreateInventoryEndpoint : IEndpoint
                     var inventory = new Inventory
                     {
                         ProductId = dto.ProductId,
-                        OnHandQuantity = dto.OnHandQuantity,
+                        OnHandQuantity = dto.Quantity,
                         LastUpdated = DateTime.UtcNow,
                     };
 

@@ -7,11 +7,11 @@ using Varastokkr.Shared.Abstract;
 
 namespace Varastokkr.InventoryAPI.Endpoints;
 
-internal class AdjustInventoryEndpoint : IEndpoint
+internal class ReleaseInventoryEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("inventory/{id:Guid}/adjust",
+        app.MapPost("inventory/{id:Guid}/reserve",
                 async (Guid id,
                     InventoryDto dto,
                     ILogger<GetInventoryEnpoint> logger,
@@ -24,31 +24,32 @@ internal class AdjustInventoryEndpoint : IEndpoint
                     if (inventory == null)
                         return Results.NotFound($"Inventory for product with id: {id} does not exist.");
 
-                    inventory.OnHandQuantity = dto.Quantity;
+                    inventory.ReservedQuantity -= dto.Quantity;
                     inventory.LastUpdated = DateTime.UtcNow;
 
                     // Event?
                     var transaction = new InventoryTransaction
                     {
                         InventoryId = inventory.Id,
-                        TransactionType = InventoryTransactionType.Adjustment,
+                        TransactionType = InventoryTransactionType.Release,
                         Quantity = dto.Quantity,
                         TransactionDate = DateTime.UtcNow,
-                        Comment = "Inventory adjusted"
+                        Comment = "Reserved inventory released"
                     };
 
                     await db.InventoryTransactions.AddAsync(transaction);
                     await db.SaveChangesAsync();
 
-                    return Results.Ok("Inventory adjusted successfully.");
+                    return Results.Ok("Inventory relesead successfully.");
                 })
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithName("AdjustProductInventory")
+            .Produces(StatusCodes.Status404NotFound)
+            .WithName("ReleaseProductInventory")
             .WithOpenApi(operation =>
             {
-                operation.Summary = "Adjust product inventory endpoint";
-                operation.Description = "Adjusts inventory for product.";
+                operation.Summary = "Release product inventory endpoint";
+                operation.Description = "Releases inventory for product.";
                 return operation;
             });
     }

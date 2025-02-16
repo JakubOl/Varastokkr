@@ -6,7 +6,7 @@ namespace Varastokkr.InventoryAPI.Entities;
 internal class Inventory
 {
     [Key]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public Guid ProductId { get; set; }
     public int WarehouseId { get; set; }
     public int OnHandQuantity { get; set; }
